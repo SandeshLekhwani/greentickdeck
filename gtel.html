@@ -47,7 +47,7 @@
     .hud > div { pointer-events: auto; }
     .logo{height:32px;display:block}
 
-    .nav{position:fixed;left:0;right:0;bottom:22px;display:flex;gap:12px;justify-content:center;z-index:2; align-items: center;}
+    .nav{position:fixed;left:0;right:0;bottom:22px;display:flex;justify-content:space-between;z-index:2; align-items: center; padding: 0 30px;}
     .navBar{display:flex;align-items:center;padding:10px;}
     .btn{padding:12px 16px;border-radius:16px;background:radial-gradient(circle at 20% 20%, rgba(0, 208, 132, 0.15), transparent 80%), rgba(17,25,40,0.66);border:1px solid var(--border);color:var(--text);cursor:pointer;backdrop-filter:blur(14px) saturate(140%);font-weight:600;box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05); transition: background .3s ease;}
     .btn:hover{background:radial-gradient(circle at 20% 20%, rgba(0, 208, 132, 0.18), transparent 80%), rgba(17,25,40,0.8);}
@@ -107,7 +107,7 @@
     }
 
     .card{grid-column:span 4;background:rgba(17,25,40,0.66);border:1px solid rgba(255,255,255,0.24);border-radius:18px;padding:16px 18px;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);text-align:left}
-    .card h3{margin:0 0 10px;font-size:clamp(16px,2.2vw,20px);color:#EAF2FF;letter-spacing:.2px;display: flex; align-items: center; justify-content: center; gap: 8px;}
+    .card h3{margin:0 0 10px;font-size:clamp(16px,2.2vw,20px);color:#EAF2FF;letter-spacing:.2px;display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;}
     
     /* Key-Value Pair Layout - TEXT FORMATTING FIXES APPLIED HERE */
     .kv{display:grid;grid-template-columns:minmax(120px, 30%) 1fr;gap:10px 16px;align-items:center; text-align: left;}
@@ -194,11 +194,41 @@
       </div>
     </section>
 
-    <!-- 1: What We Do -->
+    <!-- 1: The Problem -->
     <section class="slide">
         <div class="vizgrid">
             <div class="card" style="grid-column:span 12; text-align:center;">
-                <h2 style="color:var(--text); margin-bottom: 0;">We replace unstructured phone screens with dynamic, AI-led interviews.</h2>
+                <h2 style="color:var(--text); margin-bottom: 0; text-align: center;">Traditional hiring is broken.</h2>
+            </div>
+            <div class="card" style="grid-column:span 4">
+                <h3><i data-lucide="timer" class="w-5 h-5"></i>Low Signal</h3>
+                <div class="kv">
+                    <span class="k">Avg. Resume Scan</span>
+                    <span class="v">6-8 Seconds</span>
+                </div>
+            </div>
+            <div class="card" style="grid-column:span 4">
+                <h3><i data-lucide="users" class="w-5 h-5"></i>Overwhelmed Ops</h3>
+                <div class="kv">
+                    <span class="k">Avg. Resumes / Role</span>
+                    <span class="v">500+</span>
+                </div>
+            </div>
+            <div class="card" style="grid-column:span 4">
+                <h3><i data-lucide="filter-x" class="w-5 h-5"></i>Hidden Biases</h3>
+                <div class="kv">
+                    <span class="k">Qualified Rejections</span>
+                    <span class="v">Up to 75%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2: What We Do -->
+    <section class="slide">
+        <div class="vizgrid">
+            <div class="card" style="grid-column:span 12; text-align:center;">
+                <h2 style="color:var(--text); margin-bottom: 0; text-align: center;">We replace unstructured phone screens with dynamic, AI-led interviews.</h2>
             </div>
             <div class="card" style="grid-column:span 6">
                 <h3><i data-lucide="blending" class="w-5 h-5"></i>Unified Experience</h3>
@@ -217,7 +247,7 @@
         </div>
     </section>
 
-    <!-- 2: Demos / Roles -->
+    <!-- 3: Demos / Roles -->
     <section class="slide">
       <div class="v-stack">
         <div class="card"><h3><i data-lucide="terminal-square" class="w-5 h-5"></i>Developers</h3><div class="kv compact-kv"><span class="k">Task</span><span class="v">AI‑generated coding in IDE</span></div><div class="kv compact-kv"><span class="k">Signal</span><span class="v">Process + Outcome</span></div></div>
@@ -228,7 +258,7 @@
       </div>
     </section>
 
-    <!-- 3: Performance Analysis Example -->
+    <!-- 4: Performance Analysis Example -->
     <section class="slide" id="rubric-slide">
         <!-- The inner wrapper is now a simple content container -->
         <div class="content-wrapper"> 
@@ -400,28 +430,29 @@
         </div>
     </section>
 
-    <!-- 4: Impact & Adoption -->
+    <!-- 5: Impact & Adoption -->
     <section class="slide">
       <div class="vizgrid">
         <div class="card" style="grid-column:span 12"><h3>Live</h3><div class="kv"><span class="k">Enterprise</span><span class="v">SVS • Cipla • Aditya Birla Capital</span></div></div>
         <div class="card" style="grid-column:span 12"><h3>Academia</h3><div class="kv"><span class="k">Partners</span><span class="v">Jio Institute • Masters’ Union</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3>Recruiter Efficiency</h3><div class="kv"><span class="k">Time Saved / Week</span><span class="v">+10 Hours</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3>Time to Hire</h3><div class="kv"><span class="k">Cycle Reduction</span><span class="v">80% Faster</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3>Candidate Experience</h3><div class="kv"><span class="k">CSAT Rating</span><span class="v">4.7 / 5.0</span></div></div>
+        <div class="card" style="grid-column:span 4"><h3>HR Hours Saved</h3><div class="kv"><span class="k">To Date</span><span class="v">5200+</span></div></div>
+        <div class="card" style="grid-column:span 4"><h3>Faster Screening</h3><div class="kv"><span class="k">Time Reduction</span><span class="v">73%</span></div></div>
+        <div class="card" style="grid-column:span 4"><h3>Cost Reduction</h3><div class="kv"><span class="k">In Recruitment</span><span class="v">40%</span></div></div>
       </div>
     </section>
 
-    <!-- 5: Market & Strategy -->
+    <!-- 6: Market & Strategy -->
     <section class="slide">
       <div class="vizgrid">
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="globe-2" class="w-5 h-5"></i>Market Opportunity</h3><div class="kv"><span class="k">Global TAM</span><span class="v">$25B+ Annually</span></div><div class="kv"><span class="k">Initial Focus</span><span class="v">Tech & Business Hiring</span></div></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="move-right" class="w-5 h-5"></i>Go-to-Market</h3><div class="kv"><span class="k">Land</span><span class="v">Academia & Bootcamps</span></div><div class="kv"><span class="k">Expand</span><span class="v">Enterprise Pilots (India, EU)</span></div></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="award" class="w-5 h-5"></i>Recognition</h3><div class="kv"><span class="k">Programs & Awards</span><span class="v">• Nexus • Choose Paris Region '25</span></div></div>
+        <div class="card" style="grid-column:span 4"><h3><i data-lucide="globe-2" class="w-5 h-5"></i>TAM</h3><div class="kv"><span class="k">Global</span><span class="v">$52.5B</span></div></div>
+        <div class="card" style="grid-column:span 4"><h3><i data-lucide="target" class="w-5 h-5"></i>SAM</h3><div class="kv"><span class="k">AI/ATS Adoption</span><span class="v">$8.25B</span></div></div>
+        <div class="card" style="grid-column:span 4"><h3><i data-lucide="gem" class="w-5 h-5"></i>SOM</h3><div class="kv"><span class="k">Early Pilots</span><span class="v">$195M</span></div></div>
+        <div class="card" style="grid-column:span 6"><h3><i data-lucide="award" class="w-5 h-5"></i>Recognition</h3><div class="kv"><span class="k">Programs & Awards</span><span class="v">Nexus • Choose Paris Region '24</span></div></div>
         <div class="card" style="grid-column:span 6"><h3><i data-lucide="calendar" class="w-5 h-5"></i>Next 12 Months</h3><div class="kv"><span class="k">Goal</span><span class="v">Scale to 10 enterprise clients</span></div></div>
       </div>
     </section>
 
-    <!-- 6: Platform & Technology -->
+    <!-- 7: Platform & Technology -->
     <section class="slide">
       <div class="vizgrid">
         <div class="card" style="grid-column:span 6"><h3><i data-lucide="mic" class="w-5 h-5"></i>Voice Engine</h3><div class="kv"><span class="k">Partner</span><span class="v">ElevenLabs</span></div><div class="kv"><span class="k">Capability</span><span class="v">Low-latency, multilingual conversations</span></div></div>
@@ -431,12 +462,21 @@
       </div>
     </section>
 
-    <!-- 7: Close -->
+    <!-- 8: The Team -->
+    <section class="slide">
+        <div class="vizgrid">
+          <div class="card" style="grid-column:span 4"><h3>Karan</h3><div class="kv"><span class="k">Role</span><span class="v">Operations & Scale</span></div></div>
+          <div class="card" style="grid-column:span 4"><h3>Piyush</h3><div class="kv"><span class="k">Role</span><span class="v">HR & Assessments</span></div></div>
+          <div class="card" style="grid-column:span 4"><h3>Sandesh</h3><div class="kv"><span class="k">Role</span><span class="v">AI & Product</span></div></div>
+        </div>
+    </section>
+
+    <!-- 9: Close -->
     <section class="slide">
       <div class="vizgrid" style="align-content: center; text-align: center;">
         <div class="card" style="grid-column: span 12; background: none; border: none; box-shadow: none; padding: 20px;">
             <img class="heroLogo" src="https://greentick.org.in/assets/images/GreenwithTick_WhiteText.png" alt="GreenTick" style="max-width: min(400px, 70vw); margin-bottom: 24px;">
-            <h1 style="font-size: clamp(28px, 5vw, 42px); font-weight: 700; color: var(--text); line-height: 1.2;">Hear potential. See performance.</h1>
+            <h1 style="font-size: clamp(28px, 5vw, 42px); font-weight: 700; color: var(--text); line-height: 1.2; text-align: center;">Hire with clarity. Hire with confidence.</h1>
         </div>
       </div>
     </section>
@@ -710,5 +750,4 @@ function initializeRubricElements() {
 </script>
 </body>
 </html>
-
 
