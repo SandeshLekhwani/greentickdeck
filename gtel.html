@@ -24,12 +24,16 @@
     
     canvas#stars{position:absolute;inset:0;z-index:0;background:radial-gradient(1200px 800px at 70% 20%, rgba(125,211,252,0.12), transparent 40%), radial-gradient(900px 700px at 10% 90%, rgba(167,139,250,0.12), transparent 45%), radial-gradient(1000px 700px at 40% 50%, rgba(0, 208, 132, 0.09), transparent 50%), var(--bg);}
     
-    .slides{position:absolute;inset:0;display:grid;place-items:center;padding: 12vh 4vw 4vh;z-index:1;text-align:left;} 
+    .slides{position:absolute;inset:0;display:grid;place-items:center;padding: 12vh 4vw 4vh;z-index:1;text-align:left;}  
     .slide{width:min(1100px,92vw);min-height:64vh;padding:40px;border-radius:28px;background:var(--card);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);display:none; text-align: left; max-height: calc(100vh - 120px); overflow-y: auto;}
     .slide.active{display:block;animation:fadeUp .6s ease both}
     @keyframes fadeUp{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
     
-    h2{font-size:clamp(22px, 3.5vw, 34px);line-height:1.18;color:var(--text);text-shadow:0 1px 1px rgba(0,0,0,.35); text-align: center; padding-bottom: 60px;}
+    h2{font-size:clamp(22px, 3.5vw, 34px);line-height:1.18;color:var(--text);text-shadow:0 1px 1px rgba(0,0,0,.35); text-align: center;}
+    
+    h2.card {
+      margin-bottom: 40px;
+    }
     
     .hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:center;align-items:center;padding:10px 14px;z-index:2;pointer-events:none}
     .hud > div { pointer-events: auto; }
@@ -53,25 +57,25 @@
         -webkit-backdrop-filter:blur(14px) saturate(140%);
         border-radius:16px;
         box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
-        text-align: left; 
-        word-wrap: break-word; 
+        text-align: left;  
+        word-wrap: break-word;  
     }
 
     .vizgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;align-items:stretch}
     
-    .card{grid-column:span 4;background:rgba(17,25,40,0.66);border:1px solid rgba(255,255,255,0.24);border-radius:18px;padding:20px;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);text-align:left; display: flex; flex-direction: column; margin-bottom: 60 px}
+    .card{grid-column:span 4;background:rgba(17,25,40,0.66);border:1px solid rgba(255,255,255,0.24);border-radius:18px;padding:20px;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);text-align:left; display: flex; flex-direction: column;}
     .card h3{margin:0 0 15px;font-size:clamp(16px,2.2vw,20px);color:#EAF2FF;letter-spacing:.2px;display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;}
     .card p { font-size: 15px; line-height: 1.6; color: var(--muted); flex-grow: 1; }
     
     .kv{display:grid;grid-template-columns:1fr;gap:4px;align-items:center; text-align: left; flex-grow: 1; justify-content: center;}
     .kv .k{font-size:14px;color:var(--muted);text-align:left;white-space:normal;}
-    .kv .v{font-size:clamp(22px, 2.8vw, 32px);font-weight:700;letter-spacing:.3px;text-align:left;font-variant-numeric:tabular-nums; word-break: break-word; line-height: 1.1;} 
+    .kv .v{font-size:clamp(22px, 2.8vw, 32px);font-weight:700;letter-spacing:.3px;text-align:left;font-variant-numeric:tabular-nums; word-break: break-word; line-height: 1.1;}  
     
     @media (max-width: 860px){
       .slides { padding: 12vh 20px 4vh; }
       .vizgrid{grid-template-columns:1fr}
       .card{grid-column:span 12 !important;}
-      .kv .k, .kv .v{text-align:left;} 
+      .kv .k, .kv .v{text-align:left;}  
       .heroLogo{max-width: 80%;}
     }
   </style>
@@ -100,7 +104,7 @@
     
     <!-- 1: The Team -->
     <section class="slide">
-        <h2 class="card" style="padding-bottom: 60 px">Built by a team with deep domain expertise.</h2>
+        <h2 class="card">Built by a team with deep domain expertise.</h2>
         <div class="vizgrid">
           <div class="card" style="grid-column:span 4"><h3>Karan</h3><div class="kv"><span class="k">Expertise</span><span class="v">Operations & Scale</span></div></div>
           <div class="card" style="grid-column:span 4"><h3>Piyush</h3><div class="kv"><span class="k">Expertise</span><span class="v">HR & Assessments</span></div></div>
@@ -110,7 +114,7 @@
 
     <!-- 2: The Problem -->
     <section class="slide">
-        <h2 class="card" style="padding-bottom: 60 px">Traditional hiring is broken.</h2>
+        <h2 class="card">Traditional hiring is broken.</h2>
         <div class="vizgrid">
             <div class="card" style="grid-column:span 4">
                 <h3><i data-lucide="timer" class="w-5 h-5"></i>Low Signal</h3>
@@ -138,7 +142,7 @@
 
     <!-- 3: The Solution -->
     <section class="slide">
-        <h2  class="card" style="padding-bottom: 60 px">We replace phone screens with dynamic, AI-led interviews.</h2>
+        <h2 class="card">We replace phone screens with dynamic, AI-led interviews.</h2>
         <div class="vizgrid">
             <div class="card" style="grid-column:span 6">
                 <h3><i data-lucide="blending" class="w-5 h-5"></i>How It Works</h3>
@@ -159,7 +163,7 @@
 
   <div class="nav" aria-label="controls">
     <button class="btn" id="prev" title="Previous (←)">⟵</button>
-     <div class="navBar glass">
+      <div class="navBar glass">
       <div class="dots" id="dots" aria-label="slide dots"></div>
     </div>
     <button class="btn" id="next" title="Next (→)">⟶</button>
@@ -261,9 +265,5 @@
 </script>
 </body>
 </html>
-
-
-
-
 
 
