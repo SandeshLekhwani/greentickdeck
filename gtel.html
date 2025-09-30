@@ -3,49 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GreenTick • 3‑Minute Deck</title>
+  <title>GreenTick • 3-Slide Deck</title>
   
-  <!-- Add Tailwind CSS and Lucide/Chart.js for the new Rubric slide (Slide 5) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root{
-      --bg:#070B13;            /* deep night */
+      --bg:#070B13;
       --card:rgba(17,25,40,0.72);
       --border:rgba(255,255,255,0.24);
       --text:#F5FAFF;
       --muted:#C7D2E6;
-      --accent:#7DD3FC;        /* cyan */
-      --accent2:#A78BFA;      /* violet */
-      --success:#86EFAC;      /* green */
-      --warning:#FDE68A;      /* yellow */
+      --accent:#7DD3FC;
+      --accent2:#A78BFA;
     }
     *{box-sizing:border-box}
-    /* UPDATED: Reduced base font size to 17px for better fit */
     html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:500 16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial}
     .viewport{position:fixed;inset:0;overflow:hidden}
     
-    /* Starfield canvas */
     canvas#stars{position:absolute;inset:0;z-index:0;background:radial-gradient(1200px 800px at 70% 20%, rgba(125,211,252,0.12), transparent 40%), radial-gradient(900px 700px at 10% 90%, rgba(167,139,250,0.12), transparent 45%), radial-gradient(1000px 700px at 40% 50%, rgba(0, 208, 132, 0.09), transparent 50%), var(--bg);}
     
-    /* Slide container */
     .slides{position:absolute;inset:0;display:grid;place-items:center;padding: 12vh 4vw 4vh;z-index:1;text-align:left;} 
     .slide{width:min(1100px,92vw);min-height:64vh;padding:40px;border-radius:28px;background:var(--card);backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.06);display:none; text-align: left; max-height: calc(100vh - 120px); overflow-y: auto;}
     .slide.active{display:block;animation:fadeUp .6s ease both}
     @keyframes fadeUp{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
     
-    h1{margin:.2em 0 .2em;font-size:clamp(26px, 5vw, 50px);line-height:1.12;letter-spacing:.2px;text-shadow:0 1px 1px rgba(0,0,0,.35)}
-    h2{margin:.6em 0 .3em;font-size:clamp(20px, 3.5vw, 32px);line-height:1.18;color:var(--accent);text-shadow:0 1px 1px rgba(0,0,0,.35)}
-    p,li{color:var(--text);opacity:1}
-    .muted{color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    h2{margin:.6em 0 4em;font-size:clamp(22px, 3.5vw, 34px);line-height:1.18;color:var(--text);text-shadow:0 1px 1px rgba(0,0,0,.35); text-align: center;}
     
-    /* Nav & HUD */
     .hud{position:fixed;left:0;right:0;top:0;display:flex;justify-content:center;align-items:center;padding:10px 14px;z-index:2;pointer-events:none}
     .hud > div { pointer-events: auto; }
     .logo{height:32px;display:block}
+    .heroLogo{display:block;margin:0 auto;max-width:min(520px,60vw);height:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.45))}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(125,211,252,.18);border:1px solid rgba(255,255,255,.22);font-size:12px;margin-top:8px}
+
 
     .nav{position:fixed;left:0;right:0;bottom:22px;display:flex;justify-content:space-between;z-index:2; align-items: center; padding: 0 30px;}
     .navBar{display:flex;align-items:center;padding:10px;}
@@ -55,7 +46,6 @@
     .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.35);cursor:pointer}
     .dot.active{background:linear-gradient(135deg, var(--accent), var(--accent2))}
     
-    /* Glass utility & data viz cards - Base Presentation Styles */
     .glass{
         background: radial-gradient(circle at 20% 20%, rgba(0, 208, 132, 0.12), transparent 70%), rgba(17,25,40,0.7);
         border:1px solid rgba(255,255,255,0.24);
@@ -66,114 +56,31 @@
         text-align: left; 
         word-wrap: break-word; 
     }
-    /* glass-card style from the Rubric example - adapted to presentation colors */
-    .glass-card {
-        background: var(--card); /* Using presentation's card background */
-        backdrop-filter: blur(16px) saturate(150%);
-        -webkit-backdrop-filter: blur(16px) saturate(150%);
-        border: 1px solid var(--border);
-        transition: all 0.3s ease;
-        text-align: left;
-    }
 
-    .glass-card:hover {
-        background: rgba(17, 25, 40, 0.85); /* Slightly darker on hover */
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        transform: none; /* Removed translateY from hover to keep it static in a presentation context */
-    }
+    .vizgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;align-items:stretch}
     
-    /* Animation for elements fading in on scroll (used in rubric slide) */
-    .fade-in-section {
-        opacity: 0;
-        transition: opacity 0.8s ease-out;
-    }
-
-    .fade-in-section.is-visible {
-        opacity: 1;
-    }
-
-    .vizgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:20px;align-items:start}
+    .card{grid-column:span 4;background:rgba(17,25,40,0.66);border:1px solid rgba(255,255,255,0.24);border-radius:18px;padding:20px;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);text-align:left; display: flex; flex-direction: column;}
+    .card h3{margin:0 0 15px;font-size:clamp(16px,2.2vw,20px);color:#EAF2FF;letter-spacing:.2px;display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;}
+    .card p { margin: 0; font-size: 15px; line-height: 1.6; color: var(--muted); flex-grow: 1; }
     
-    /* NEW: Class for vertical card stacking */
-    .v-stack {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 16px;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-    .v-stack .card {
-      grid-column: 1 / -1; /* Override default card grid span */
-    }
-
-    .card{grid-column:span 4;background:rgba(17,25,40,0.66);border:1px solid rgba(255,255,255,0.24);border-radius:18px;padding:16px 18px;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 6px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);text-align:left}
-    .card h3{margin:0 0 10px;font-size:clamp(16px,2.2vw,20px);color:#EAF2FF;letter-spacing:.2px;display: flex; align-items: center; justify-content: center; gap: 8px; text-align: center;}
+    .kv{display:grid;grid-template-columns:1fr;gap:4px;align-items:center; text-align: left; flex-grow: 1; justify-content: center;}
+    .kv .k{font-size:14px;color:var(--muted);text-align:left;white-space:normal;}
+    .kv .v{font-size:clamp(22px, 2.8vw, 32px);font-weight:700;letter-spacing:.3px;text-align:left;font-variant-numeric:tabular-nums; word-break: break-word; line-height: 1.1;} 
     
-    /* Key-Value Pair Layout - TEXT FORMATTING FIXES APPLIED HERE */
-    .kv{display:grid;grid-template-columns:minmax(120px, 30%) 1fr;gap:10px 16px;align-items:center; text-align: left;}
-    /* FIX: Allow key to wrap normally by removing nowrap, overflow, and ellipsis */
-    .kv .k{font-size:14px;color:var(--muted);text-align:left;white-space:normal; overflow: visible; text-overflow: unset;}
-    /* FIX: Slight reduction in clamp max size for better fit */
-    .kv .v{font-size:clamp(17px, 2.5vw, 24px);font-weight:700;letter-spacing:.3px;text-align:left;font-variant-numeric:tabular-nums; word-break: break-word;} 
-
-    /* NEW STYLES for Slide 4 */
-    .compact-kv {
-        gap: 6px 16px; /* Reduced vertical gap */
-    }
-    .compact-kv .k {
-        font-size: 12px;
-    }
-    .compact-kv .v {
-        font-size: clamp(15px, 2.2vw, 18px);
-        line-height: 1.3;
-    }
-
-    .heroLogo{display:block;margin:0 auto;max-width:min(520px,60vw);height:auto;filter:drop-shadow(0 12px 24px rgba(0,0,0,.45))}
-    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(125,211,252,.18);border:1px solid rgba(255,255,255,.22);font-size:12px;margin-top:8px}
-
-    /* General responsive and overflow fixes */
-    .slide * {
-      max-width: 100%;
-      overflow-wrap: break-word;
-    }
-    .slide .card {
-        text-align: left !important;
-    }
-    
-    /* FIX: Enable scrolling for the long rubric slide (Slide 5) */
-    
-    /* FIX: Ensure the innermost container doesn't force height */
-    #rubric-slide .content-wrapper {
-        height: auto;
-    }
-
-
     @media (max-width: 860px){
-      .slides {
-        padding: 12vh 20px 4vh; /* Adjust mobile padding */
-      }
-      .grid{grid-template-columns:1fr}
-      .two-col{columns:1}
-      .card{grid-column:span 12}
-      .kv{grid-template-columns:1fr;} 
-      /* UPDATED: Reduced mobile font size for key-value pairs */
-      .kv .k, .kv .v{text-align:left; font-size: 14px;} 
-      .kv .k {white-space: normal;} 
+      .slides { padding: 12vh 20px 4vh; }
+      .vizgrid{grid-template-columns:1fr}
+      .card{grid-column:span 12 !important;}
+      .kv .k, .kv .v{text-align:left;} 
       .heroLogo{max-width: 80%;}
-      /* Mobile fix for all slides */
-      .slide {
-        max-height: calc(100vh - 80px); /* Tighter fit on mobile */
-        padding: 20px; /* Reduced padding on mobile for more content space */
-      }
     }
-    
   </style>
 </head>
 <body>
 <div class="viewport">
   <canvas id="stars"></canvas>
+  
   <div class="hud">
-    <!-- Centered HUD (Glass Container) -->
     <div class="glass" style="padding:8px 16px;">
       <img class="logo" src="https://greentick.org.in/assets/images/GreenwithTick_WhiteText.png" alt="GreenTick logo" />
     </div>
@@ -181,36 +88,41 @@
 
   <div class="slides" id="slides">
 
-    <!-- 0: Cold Open — Logo Splash -->
+    <!-- 0: Title -->
     <section class="slide active">
-      <div class="vizgrid">
-        <div class="card" style="grid-column:span 12; text-align:center; padding:36px">
+      <div class="vizgrid" style="align-content: center;">
+        <div class="card" style="grid-column:span 12; text-align:center; padding:36px; background: none; border: none; box-shadow: none;">
           <img class="heroLogo" src="https://greentick.org.in/assets/images/GreenwithTick_WhiteText.png" alt="GreenTick" />
-          <div class="kv" style="max-width:860px;margin:18px auto 0; text-align: center;">
-            <span class="k"> </span><span class="v"> </span>
-          </div>
-          <span class="badge">First‑round hiring, re‑engineered</span>
+          <span class="badge" style="margin-top: 24px; font-size: 14px;">Hire for Skill, Not Just Keywords.</span>
         </div>
       </div>
     </section>
-
-    <!-- 1: The Problem -->
+    
+    <!-- 1: The Team -->
     <section class="slide">
+        <h2>Built by a team with deep domain expertise.</h2>
         <div class="vizgrid">
-            <div class="card" style="grid-column:span 12; text-align:center;">
-                <h2 style="color:var(--text); margin-bottom: 0; text-align: center;">Traditional hiring is broken.</h2>
-            </div>
+          <div class="card" style="grid-column:span 4"><h3>Karan</h3><div class="kv"><span class="k">Expertise</span><span class="v">Operations & Scale</span></div></div>
+          <div class="card" style="grid-column:span 4"><h3>Piyush</h3><div class="kv"><span class="k">Expertise</span><span class="v">HR & Assessments</span></div></div>
+          <div class="card" style="grid-column:span 4"><h3>Sandesh</h3><div class="kv"><span class="k">Expertise</span><span class="v">AI & Product</span></div></div>
+        </div>
+    </section>
+
+    <!-- 2: The Problem -->
+    <section class="slide">
+        <h2>Traditional hiring is broken.</h2>
+        <div class="vizgrid">
             <div class="card" style="grid-column:span 4">
                 <h3><i data-lucide="timer" class="w-5 h-5"></i>Low Signal</h3>
                 <div class="kv">
                     <span class="k">Avg. Resume Scan</span>
-                    <span class="v">6-8 Seconds</span>
+                    <span class="v">6-8 Sec</span>
                 </div>
             </div>
             <div class="card" style="grid-column:span 4">
                 <h3><i data-lucide="users" class="w-5 h-5"></i>Overwhelmed Ops</h3>
                 <div class="kv">
-                    <span class="k">Avg. Resumes / Role</span>
+                    <span class="k">Resumes / Role</span>
                     <span class="v">500+</span>
                 </div>
             </div>
@@ -218,277 +130,39 @@
                 <h3><i data-lucide="filter-x" class="w-5 h-5"></i>Hidden Biases</h3>
                 <div class="kv">
                     <span class="k">Qualified Rejections</span>
-                    <span class="v">Up to 75%</span>
+                    <span class="v">75%</span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 2: What We Do -->
+    <!-- 3: The Solution -->
     <section class="slide">
+        <h2>We replace phone screens with dynamic, AI-led interviews.</h2>
         <div class="vizgrid">
-            <div class="card" style="grid-column:span 12; text-align:center;">
-                <h2 style="color:var(--text); margin-bottom: 0; text-align: center;">We replace unstructured phone screens with dynamic, AI-led interviews.</h2>
+            <div class="card" style="grid-column:span 6">
+                <h3><i data-lucide="blending" class="w-5 h-5"></i>How It Works</h3>
+                <p>Candidates interact with our voice AI while completing role-specific tasks in a unified interface.</p>
             </div>
             <div class="card" style="grid-column:span 6">
-                <h3><i data-lucide="blending" class="w-5 h-5"></i>Unified Experience</h3>
-                <div class="kv">
-                    <span class="k">How it works</span>
-                    <span class="v">Candidates interact with voice AI while completing role-specific tasks.</span>
-                </div>
+                <h3><i data-lucide="clipboard-check" class="w-5 h-5"></i>The Result</h3>
+                <p>We generate deep, unbiased insights on skills and readiness, enabling faster, fairer decisions.</p>
             </div>
-            <div class="card" style="grid-column:span 6">
-                <h3><i data-lucide="clipboard-check" class="w-5 h-5"></i>Rich, Unbiased Signal</h3>
-                <div class="kv">
-                    <span class="k">The output</span>
-                    <span class="v">We generate deep insights on skills and readiness, enabling faster, fairer decisions.</span>
-                </div>
-            </div>
+            <div class="card" style="grid-column:span 4"><h3>HR Hours Saved</h3><div class="kv"><span class="k">To Date</span><span class="v">5200+</span></div></div>
+            <div class="card" style="grid-column:span 4"><h3>Faster Screening</h3><div class="kv"><span class="k">Time Reduction</span><span class="v">73%</span></div></div>
+            <div class="card" style="grid-column:span 4"><h3>Cost Reduction</h3><div class="kv"><span class="k">In Recruitment</span><span class="v">40%</span></div></div>
         </div>
     </section>
 
-    <!-- 3: Demos / Roles -->
-    <section class="slide">
-      <div class="v-stack">
-        <div class="card"><h3><i data-lucide="terminal-square" class="w-5 h-5"></i>Developers</h3><div class="kv compact-kv"><span class="k">Task</span><span class="v">AI‑generated coding in IDE</span></div><div class="kv compact-kv"><span class="k">Signal</span><span class="v">Process + Outcome</span></div></div>
-        <div class="card"><h3><i data-lucide="pen-tool" class="w-5 h-5"></i>Designers</h3><div class="kv compact-kv"><span class="k">Task</span><span class="v">Improve live component</span></div><div class="kv compact-kv"><span class="k">Signal</span><span class="v">Craft + Reasoning</span></div></div>
-        <div class="card"><h3><i data-lucide="trending-up" class="w-5 h-5"></i>Sales</h3><div class="kv compact-kv"><span class="k">Task</span><span class="v">Mock pitch with objections</span></div><div class="kv compact-kv"><span class="k">Signal</span><span class="v">Discovery + Handling</span></div></div>
-        <div class="card"><h3><i data-lucide="user-check" class="w-5 h-5"></i>Customer Success</h3><div class="kv compact-kv"><span class="k">Task</span><span class="v">Scenario → next steps</span></div><div class="kv compact-kv"><span class="k">Signal</span><span class="v">Decision Quality</span></div></div>
-        <div class="card"><h3><i data-lucide="briefcase" class="w-5 h-5"></i>Consultants</h3><div class="kv compact-kv"><span class="k">Task</span><span class="v">Case with evolving constraints</span></div><div class="kv compact-kv"><span class="k">Signal</span><span class="v">Structure under pressure</span></div></div>
-      </div>
-    </section>
-
-    <!-- 4: Performance Analysis Example -->
-    <section class="slide" id="rubric-slide">
-        <!-- The inner wrapper is now a simple content container -->
-        <div class="content-wrapper"> 
-
-            <!-- Performance Snapshot Section -->
-            <section class="mb-8 md:mb-12 fade-in-section">
-                <h2 class="text-xl md:text-2xl font-bold mb-4 text-center flex items-center justify-center gap-2 text-white"><i data-lucide="bar-chart-3" class="w-5 h-5"></i>Performance Snapshot: Growth in Action</h2>
-                <div class="glass-card rounded-xl shadow-xl overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-white/5">
-                                <tr>
-                                    <th class="p-3 md:p-4 text-xs font-semibold uppercase tracking-wider text-slate-300">Metric</th>
-                                    <th class="p-3 md:p-4 text-xs font-semibold uppercase tracking-wider text-center text-slate-300">Attempt 1</th>
-                                    <th class="p-3 md:p-4 text-xs font-semibold uppercase tracking-wider text-center text-slate-300">Attempt 2</th>
-                                    <th class="p-3 md:p-4 text-xs font-semibold uppercase tracking-wider text-center text-slate-300">Change</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="border-t border-white/10">
-                                    <td class="p-3 md:p-4 font-medium text-white">Overall Score</td>
-                                    <td class="p-3 md:p-4 text-center text-base">62%</td>
-                                    <td class="p-3 md:p-4 text-center text-base">66%</td>
-                                    <td class="p-3 md:p-4 text-center text-base font-bold text-cyan-400">+4%</td>
-                                </tr>
-                                <tr class="border-t border-white/10">
-                                    <td class="p-3 md:p-4 font-medium text-white">Verdict</td>
-                                    <td class="p-3 md:p-4 text-center">Developing</td>
-                                    <td class="p-3 md:p-4 text-center">Approaching Job-Ready</td>
-                                    <td class="p-3 md:p-4 text-center font-bold text-cyan-400">Improved</td>
-                                </tr>
-                                <tr class="border-t border-white/10">
-                                    <td class="p-3 md:p-4 font-medium text-white">Primary Role Focus</td>
-                                    <td class="p-3 md:p-4 text-center">Business Analyst</td>
-                                    <td class="p-3 md:p-4 text-center">Founder's Office</td>
-                                    <td class="p-3 md:p-4 text-center font-bold text-amber-400">Shifted</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Charts Section -->
-            <section class="mb-8 md:mb-12 fade-in-section">
-                <h2 class="text-xl md:text-2xl font-bold mb-4 text-center flex items-center justify-center gap-2 text-white"><i data-lucide="pie-chart" class="w-5 h-5"></i>Data-Driven Analysis</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Overall Progress Chart -->
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-3 text-center text-white">Overall Progress (%)</h3>
-                        <div class="relative h-56 md:h-72">
-                            <canvas id="overallProgressChart"></canvas>
-                        </div>
-                    </div>
-                    <!-- Skill Analysis Chart -->
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-3 text-center text-white">Skill Analysis (Score / 10)</h3>
-                        <div class="relative h-56 md:h-72">
-                            <canvas id="skillAnalysisChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Key Improvements Section -->
-            <section class="mb-8 md:mb-12 fade-in-section">
-                <h2 class="text-xl md:text-2xl font-bold mb-4 text-center flex items-center justify-center gap-2 text-white"><i data-lucide="sparkles" class="w-5 h-5"></i>Key Improvements: The Glow-Up</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-cyan-400">Confidence & Clarity</h3>
-                        <p class="text-slate-300 text-sm">Smoother, more professional delivery with fewer hesitations. Articulated experiences more clearly.</p>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-cyan-400">Conciseness</h3>
-                        <p class="text-slate-300 text-sm">Answers were shorter and more direct, avoiding previous long-winded detours.</p>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-cyan-400">Self-Awareness</h3>
-                        <p class="text-slate-300 text-sm">Acknowledged weakness of "over-explaining," showing maturity and a proactive attitude.</p>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-cyan-400">Interviewer Engagement</h3>
-                        <p class="text-slate-300 text-sm">Actively asked multiple follow-up questions, demonstrating better engagement and curiosity.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Persistent Gaps Section -->
-            <section class="mb-8 md:mb-12 fade-in-section">
-                <h2 class="text-xl md:text-2xl font-bold mb-4 text-center flex items-center justify-center gap-2 text-white"><i data-lucide="key-round" class="w-5 h-5"></i>Persistent Gaps: The Next Level to Unlock</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-amber-400">Generic Responses</h3>
-                        <p class="text-slate-300 text-sm">Problem-solving answers remained high-level, lacking specifics on prioritization, stakeholder management, or risk assessment.</p>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-amber-400">Surface-Level Technical Detail</h3>
-                        <p class="text-slate-300 text-sm">Resume lists Python, SQL & Power BI, but answers didn't showcase how these tools derived insights or solved problems effectively.</p>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-amber-400">Lack of Quantified Impact</h3>
-                        <p class="text-slate-300 text-sm">Success stories were not backed by measurable outcomes (e.g., % improvement, cost reduction), making the impact unclear.</p>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 shadow-xl">
-                        <h3 class="font-bold text-base mb-1 text-amber-400">Need for More Leadership</h3>
-                        <p class="text-slate-300 text-sm">Examples focused more on teamwork and support rather than demonstrating proactive leadership or taking initiative.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Action Plan Section -->
-            <section class="fade-in-section">
-                <h2 class="text-xl md:text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2 text-white"><i data-lucide="rocket" class="w-5 h-5"></i>Action Plan: The Roadmap to "Hired"</h2>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-card rounded-xl p-4 md:p-6 shadow-xl">
-                        <h3 class="text-lg font-bold mb-3 text-center text-cyan-400">Short-Term (1-4 Weeks)</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <span class="font-semibold text-white text-sm">Master the STAR Method:</span>
-                                    <p class="text-sm text-slate-300">Rigorously practice structuring every behavioral answer using the Situation, Task, Action, Result framework for clarity.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <span class="font-semibold text-white text-sm">Quantify Everything:</span>
-                                    <p class="text-sm text-slate-300">Prepare specific, metric-driven examples for every project (e.g., "reduced NPS fall by X%").</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <span class="font-semibold text-white text-sm">Align to the Role:</span>
-                                    <p class="text-sm text-slate-300">Deeply research the target role and tailor answers to highlight relevant skills like strategic thinking and decision-making.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="glass-card rounded-xl p-4 md:p-6 shadow-xl">
-                        <h3 class="text-lg font-bold mb-3 text-center text-amber-400">Long-Term (2-6 Months)</h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <span class="font-semibold text-white text-sm">Build an Impact Portfolio:</span>
-                                    <p class="text-sm text-slate-300">Curate stories that focus on the measurable business impact created, not just the tasks performed.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <span class="font-semibold text-white text-sm">Deepen Technical Storytelling:</span>
-                                    <p class="text-sm text-slate-300">Prepare to discuss how you've used tools like Python or SQL to derive specific business insights from data.</p>
-                                </div>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <i data-lucide="check-circle-2" class="w-4 h-4 text-amber-400 mt-1 flex-shrink-0"></i>
-                                <div>
-                                    <span class="font-semibold text-white text-sm">Polish Executive Communication:</span>
-                                    <p class="text-sm text-slate-300">Develop a crisp, structured, and metric-oriented communication style suitable for senior stakeholders.</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </section>
-
-    <!-- 5: Impact & Adoption -->
-    <section class="slide">
-      <div class="vizgrid">
-        <div class="card" style="grid-column:span 12"><h3>Live</h3><div class="kv"><span class="k">Enterprise</span><span class="v">SVS • Cipla • Aditya Birla Capital</span></div></div>
-        <div class="card" style="grid-column:span 12"><h3>Academia</h3><div class="kv"><span class="k">Partners</span><span class="v">Jio Institute • Masters’ Union</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3>HR Hours Saved</h3><div class="kv"><span class="k">To Date</span><span class="v">5200+</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3>Faster Screening</h3><div class="kv"><span class="k">Time Reduction</span><span class="v">73%</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3>Cost Reduction</h3><div class="kv"><span class="k">In Recruitment</span><span class="v">40%</span></div></div>
-      </div>
-    </section>
-
-    <!-- 6: Market & Strategy -->
-    <section class="slide">
-      <div class="vizgrid">
-        <div class="card" style="grid-column:span 4"><h3><i data-lucide="globe-2" class="w-5 h-5"></i>TAM</h3><div class="kv"><span class="k">Global</span><span class="v">$52.5B</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3><i data-lucide="target" class="w-5 h-5"></i>SAM</h3><div class="kv"><span class="k">AI/ATS Adoption</span><span class="v">$8.25B</span></div></div>
-        <div class="card" style="grid-column:span 4"><h3><i data-lucide="gem" class="w-5 h-5"></i>SOM</h3><div class="kv"><span class="k">Early Pilots</span><span class="v">$195M</span></div></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="award" class="w-5 h-5"></i>Recognition</h3><div class="kv"><span class="k">Programs & Awards</span><span class="v">Nexus • Choose Paris Region '24</span></div></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="calendar" class="w-5 h-5"></i>Next 12 Months</h3><div class="kv"><span class="k">Goal</span><span class="v">Scale to 10 enterprise clients</span></div></div>
-      </div>
-    </section>
-
-    <!-- 7: Platform & Technology -->
-    <section class="slide">
-      <div class="vizgrid">
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="mic" class="w-5 h-5"></i>Voice Engine</h3><div class="kv"><span class="k">Partner</span><span class="v">ElevenLabs</span></div><div class="kv"><span class="k">Capability</span><span class="v">Low-latency, multilingual conversations</span></div></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="brain-circuit" class="w-5 h-5"></i>AI Evaluation Core</h3><div class="kv"><span class="k">Scoring</span><span class="v">Rubric-aligned analysis</span></div><div class="kv"><span class="k">Fairness</span><span class="v">Bias & variance reduction</span></div><span class="badge" style="margin-top: 12px;">Provisional Patent</span></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="layout-template" class="w-5 h-5"></i>Dynamic Task UI</h3><div class="kv"><span class="k">Modules</span><span class="v">Coding, design, case studies</span></div><div class="kv"><span class="k">Sync</span><span class="v">Seamless voice & screen events</span></div><span class="badge" style="margin-top: 12px;">Provisional Patent</span></div>
-        <div class="card" style="grid-column:span 6"><h3><i data-lucide="server" class="w-5 h-5"></i>Architecture</h3><div class="kv"><span class="k">Latency Budget</span><span class="v">< 350ms for interactions</span></div><div class="kv"><span class="k">Design</span><span class="v">Event-driven & scalable</span></div><span class="badge" style="margin-top: 12px;">Provisional Patent</span></div>
-      </div>
-    </section>
-
-    <!-- 8: The Team -->
-    <section class="slide">
-        <div class="vizgrid">
-          <div class="card" style="grid-column:span 4"><h3>Karan</h3><div class="kv"><span class="k">Role</span><span class="v">Operations & Scale</span></div></div>
-          <div class="card" style="grid-column:span 4"><h3>Piyush</h3><div class="kv"><span class="k">Role</span><span class="v">HR & Assessments</span></div></div>
-          <div class="card" style="grid-column:span 4"><h3>Sandesh</h3><div class="kv"><span class="k">Role</span><span class="v">AI & Product</span></div></div>
-        </div>
-    </section>
-
-    <!-- 9: Close -->
-    <section class="slide">
-      <div class="vizgrid" style="align-content: center; text-align: center;">
-        <div class="card" style="grid-column: span 12; background: none; border: none; box-shadow: none; padding: 20px;">
-            <img class="heroLogo" src="https://greentick.org.in/assets/images/GreenwithTick_WhiteText.png" alt="GreenTick" style="max-width: min(400px, 70vw); margin-bottom: 24px;">
-            <h1 style="font-size: clamp(28px, 5vw, 42px); font-weight: 700; color: var(--text); line-height: 1.2; text-align: center;">Hire with clarity. Hire with confidence.</h1>
-        </div>
-      </div>
-    </section>
 
   </div>
 
   <div class="nav" aria-label="controls">
-    <button class="btn" id="prev" title="Previous (←)">⟵ Prev</button>
-    <div class="navBar glass">
+    <button class="btn" id="prev" title="Previous (←)">⟵</button>
+     <div class="navBar glass">
       <div class="dots" id="dots" aria-label="slide dots"></div>
     </div>
-    <button class="btn" id="next" title="Next (→)">Next ⟶</button>
+    <button class="btn" id="next" title="Next (→)">⟶</button>
   </div>
 </div>
 
@@ -497,8 +171,8 @@
 (function(){
   const c = document.getElementById('stars');
   const ctx = c.getContext('2d');
-  let W, H, DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-  let stars = [], meteors = [];
+  let W, H, DPR = Math.max(1, window.devicePixelRatio || 1);
+  let stars = [];
   function resize(){
     W = c.width = Math.floor(innerWidth * DPR);
     H = c.height = Math.floor(innerHeight * DPR);
@@ -515,14 +189,8 @@
       s: Math.random()*0.6+0.2
     }));
   }
-  function meteor(){
-    if(Math.random()<0.008){
-      meteors.push({x:Math.random()*W, y:-20*DPR, vx: -4*DPR, vy: 6*DPR, life: 0});
-    }
-  }
   function step(){
     ctx.clearRect(0,0,W,H);
-    // twinkle stars
     for(const st of stars){
       st.a += (Math.random()*0.08-0.04);
       st.a = Math.max(0.1, Math.min(1, st.a));
@@ -532,20 +200,6 @@
       ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
       ctx.fill();
       st.x -= st.s; if(st.x < -5) st.x = W+5;
-    }
-    // meteors
-    meteor();
-    ctx.globalAlpha = 1;
-    for(let i=meteors.length-1;i>=0;i--){
-      const m=meteors[i];
-      ctx.strokeStyle = 'rgba(255,255,255,.75)';
-      ctx.lineWidth = 2*DPR;
-      ctx.beginPath();
-      ctx.moveTo(m.x, m.y);
-      ctx.lineTo(m.x - 20*DPR, m.y + 30*DPR);
-      ctx.stroke();
-      m.x += m.vx; m.y += m.vy; m.life++;
-      if(m.y>H+40*DPR || m.life>120) meteors.splice(i,1);
     }
     requestAnimationFrame(step);
   }
@@ -579,20 +233,10 @@
     slides[i].classList.add('active');
     renderDots();
     
-    // Show/hide header on first/last slide
-    if (i === 0 || i === slides.length - 1) {
-      hud.style.display = 'none';
-    } else {
-      hud.style.display = 'flex';
-    }
+    // Show/hide header on first slide
+    hud.style.display = (i === 0) ? 'none' : 'flex';
 
-    // ALWAYS call createIcons on slide change
     lucide.createIcons();
-
-    // Re-create charts specifically for the rubric slide
-    if (slides[i].id === 'rubric-slide') {
-        initializeRubricElements();
-    }
     history.replaceState(null,'','#'+(i+1));
   }
 
@@ -609,145 +253,17 @@
   const hash = parseInt(location.hash.replace('#',''),10);
   if(!isNaN(hash) && hash>=1 && hash<=slides.length){ i = hash-1; slides[0].classList.remove('active'); slides[i].classList.add('active'); }
   
-  // Initial check for header visibility on page load
-  if (i === 0 || i === slides.length - 1) {
-    hud.style.display = 'none';
-  } else {
-    hud.style.display = 'flex';
-  }
-
-  // Ensure the rubric content initializes if the page loads directly on that slide
-  if (slides[i] && slides[i].id === 'rubric-slide') {
-      setTimeout(initializeRubricElements, 100); // Small delay to ensure all DOM is painted
-  }
-
-  // Initial icon creation for the first slide
+  // Initial check on load
+  hud.style.display = (i === 0) ? 'none' : 'flex';
   lucide.createIcons();
   renderDots();
 })();
-
-// -------- Rubric Slide Specific Initialization --------
-function initializeRubricElements() {
-    // 1. Initialize Lucide Icons for the visible slide content
-    lucide.createIcons();
-
-    // 2. Initialize the fade-in animation observer
-    // We target only elements within the rubric slide
-    const sections = document.querySelectorAll('#rubric-slide .fade-in-section');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-            }
-        });
-    }, { threshold: 0.1 });
-    sections.forEach(section => { observer.observe(section); });
-
-
-    // 3. Chart.js Implementation 
-    const chartFontColor = '#e2e8f0'; // slate-200
-    const chartGridColor = 'rgba(255, 255, 255, 0.15)';
-    
-    // Clear old charts if they exist to prevent duplication on slide revisit
-    if (window.overallProgressChartInstance) window.overallProgressChartInstance.destroy();
-    if (window.skillAnalysisChartInstance) window.skillAnalysisChartInstance.destroy();
-
-    const progressCtx = document.getElementById('overallProgressChart');
-    if (progressCtx) {
-        window.overallProgressChartInstance = new Chart(progressCtx.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: ['Attempt 1', 'Attempt 2'],
-                datasets: [{
-                    label: 'Overall Score',
-                    data: [62, 66],
-                    backgroundColor: [
-                        'rgba(251, 191, 36, 0.5)', // amber-400
-                        'rgba(34, 211, 238, 0.5)'  // cyan-400
-                    ],
-                    borderColor: [
-                        'rgba(251, 191, 36, 1)',
-                        'rgba(34, 211, 238, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: { label: (context) => `${context.dataset.label}: ${context.formattedValue}%` }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: { color: chartFontColor, font: { size: 12 } },
-                        grid: { color: chartGridColor }
-                    },
-                    x: {
-                        ticks: { color: chartFontColor, font: { size: 12 } },
-                        grid: { display: false }
-                    }
-                }
-            }
-        });
-    }
-
-    const skillsCtx = document.getElementById('skillAnalysisChart');
-    if (skillsCtx) {
-        window.skillAnalysisChartInstance = new Chart(skillsCtx.getContext('2d'), {
-            type: 'radar',
-            data: {
-                labels: ['Technical', 'Non-Technical', 'Communication', 'Problem-Solving', 'Readiness'],
-                datasets: [{
-                    label: 'Attempt 1',
-                    data: [7, 7, 5, 6, 6],
-                    backgroundColor: 'rgba(251, 191, 36, 0.2)',
-                    borderColor: 'rgba(251, 191, 36, 1)',
-                    pointBackgroundColor: 'rgba(251, 191, 36, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(251, 191, 36, 1)'
-                }, {
-                    label: 'Attempt 2',
-                    data: [6, 7, 7, 6, 7],
-                    backgroundColor: 'rgba(34, 211, 238, 0.2)',
-                    borderColor: 'rgba(34, 211, 238, 1)',
-                    pointBackgroundColor: 'rgba(34, 211, 238, 1)',
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: 'rgba(34, 211, 238, 1)'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { labels: { color: chartFontColor } }
-                },
-                scales: {
-                    r: {
-                        angleLines: { color: chartGridColor },
-                        grid: { color: chartGridColor },
-                        pointLabels: { color: chartFontColor, font: { size: 12 } },
-                        ticks: {
-                            color: chartFontColor,
-                            backdropColor: 'rgba(0,0,0,0.5)',
-                            stepSize: 2
-                        },
-                        min: 0,
-                        max: 10
-                    }
-                }
-            }
-        });
-    }
-}
 </script>
 </body>
 </html>
+
+
+
+
+
 
